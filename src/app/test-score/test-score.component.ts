@@ -78,9 +78,27 @@ export class TestScoreComponent implements OnInit {
   }
 
   computeGrade() {
-    const data = this.calculate();
-    localStorage.setItem('calculatedData', JSON.stringify(data));
-    this.router.navigate(['home', data]);
+    const commaIndex = this.name.indexOf(', ');
+    let error = false;
+
+    if (this.name === '') {
+      // this.errorMessage = 'Name must not be empty!';
+      this.toastService.showToast('warning', 5000, 'Name must not be null');
+      error = true;
+    } else if (commaIndex === -1) {
+      // this.errorMessage = 'Name must have a comma and a space!';
+      this.toastService.showToast('warning', 5000, 'Name must contain a comma and a space');
+      error = true;
+    }
+
+    if (!error) {
+      const firstName = this.name.slice(commaIndex + 1, this.name.length);
+      const lastName = this.name.slice(0, commaIndex);
+      const fullName = firstName + ' ' + lastName;
+      const data = this.calculate();
+      localStorage.setItem('calculatedData', JSON.stringify(data));
+      this.router.navigate(['home', data]);
+    }
   }
 
   // calculateGrade() {
@@ -101,7 +119,7 @@ export class TestScoreComponent implements OnInit {
   //     default:
   //       grade = 'F';
   //       break;
-// }
+  // }
 
   // }
 
@@ -121,31 +139,11 @@ export class TestScoreComponent implements OnInit {
       totalPointsReceived: pointsReceived,
       totalPercentage: percentage / this.tests.length,
       // finalGrade:
-      };
-    }
+    };
+  }
 
-    // Name() {
-    //   const commaIndex = this.name.indexOf(', ');
-    //   let error = false;
+  Name() {
 
-    //   if (this.name === '') {
-    //     // this.errorMessage = 'Name must not be empty!';
-    //     this.toastService.showToast('warn', 5000, 'Name must not be null');
-    //     error = true;
-    //   } else if (commaIndex === -1) {
-    //     // this.errorMessage = 'Name must have a comma and a space!';
-    //     this.toastService.showToast('warn', 5000, 'Name must contain a comma and a space');
-    //     error = true;
-    //   }
-
-    //   if (!error) {
-    //     const firstName = this.name.slice(commaIndex + 1, this.name.length);
-    //     const lastName = this.name.slice(0, commaIndex);
-    //     const fullName = firstName + ' ' + lastName;
-    //     return{
-    //       fullName
-    //     };
-    //   }
-    // }
+  }
 
 }
